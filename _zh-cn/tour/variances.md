@@ -24,7 +24,7 @@ class Baz[A]  // 不变类
 
 ### 协变
 
-泛型类的类型参数`A`可以通过使用注解`+A`变成协变的。对于某个`class List[+A]`，让`A`型变意味着对于类型`A`和`B`，如果`A`是`B`的子类型，那么`List[A]`则是`List[B]`的子类型。这让我们可以使用泛型类来创建非常有用且直观的子类型关系。
+泛型类的类型参数`A`可以通过使用注解`+A`变成协变的。对于某个`class List[+A]`，让`A`协变意味着对于类型`A`和`B`，如果`A`是`B`的子类型，那么`List[A]`则是`List[B]`的子类型。这让我们可以使用泛型类来创建非常有用且直观的子类型关系。
 
 现在来看下面这个简单的类结构：
 
@@ -63,9 +63,9 @@ object CovarianceTest extends App {
 
 ### 逆变
 
-A type parameter `A` of a generic class can be made contravariant by using the annotation `-A`. This creates a subtyping relationship between the class and its type parameter that is similar, but opposite to what we get with covariance. That is, for some `class Writer[-A]`, making `A` contravariant implies that for two types `A` and `B` where `A` is a subtype of `B`, `Writer[B]` is a subtype of `Writer[A]`.
+泛型类的类型参数`A`可以通过使用注解`-A`变成逆变的。这使得我们在类和相似的类型参数之间建立起了子类型关系，而结果正好与协变相反。也就是说，对于某个类`class Writer[-A]`，让`A`逆变意味着对于类型`A`和`B`，如果`A`是`B`的子类型，那么`Writer[B]`则是`Writer[A]`的子类型。
 
-Consider the `Cat`, `Dog`, and `Animal` classes defined above for the following example:
+想想上面定义的类`Cat`、`Dog`和`Animal`，在下面例子中的应用：
 
 ```tut
 abstract class Printer[-A] {
@@ -73,7 +73,7 @@ abstract class Printer[-A] {
 }
 ```
 
-A `Printer[A]` is a simple class that knows how to print out some type `A`. Let's define some subclasses for specific types:
+一个`Printer[A]`是一个简单的类，它知道该如何打印出类型`A`。下面我们为具体的类型来定义一些子类吧：
 
 ```tut
 class AnimalPrinter extends Printer[Animal] {
@@ -87,7 +87,7 @@ class CatPrinter extends Printer[Cat] {
 }
 ```
 
-If a `Printer[Cat]` knows how to print any `Cat` to the console, and a `Printer[Animal]` knows how to print any `Animal` to the console, it makes sense that a `Printer[Animal]` would also know how to print any `Cat`. The inverse relationship does not apply, because a `Printer[Cat]` does not know how to print any `Animal` to the console. Therefore, we should be able to substitute a `Printer[Animal]` for a `Printer[Cat]`, if we wish, and making `Printer[A]` contravariant allows us to do exactly that.
+如果一个`Printer[Cat]`知道如何打印`Cat`到控制台，而一个`Printer[Animal]`知道如何打印`Animal`到控制台，那么一个`Printer[Animal]`从道理上讲也应该知道如何打印`Cat`。反过来则不适用，因为一个`Printer[Cat]`不知道如何打印一个`Animal`到控制台。因此我们应该能够用`Printer[Animal]`来替换`Printer[Cat]`，要做到这点的话，需要让`Printer[A]`成为逆变的。
 
 ```tut
 object ContravarianceTest extends App {
@@ -105,16 +105,16 @@ object ContravarianceTest extends App {
 }
 ```
 
-The output of this program will be:
+该程序的输出如下：
 
 ```
 The cat's name is: Boots
 The animal's name is: Boots
 ```
 
-### Invariance
+### 不变
 
-Generic classes in Scala are invariant by default. This means that they are neither covariant nor contravariant. In the context of the following example, `Container` class is invariant. A `Container[Cat]` is _not_ a `Container[Animal]`, nor is the reverse true.
+Scala中的泛型类默认是不变的。这意味着它们既不是协变的，也不是逆变的。下面的例子中，`Container`类是不变的，则`Container[Cat]`不是`Container[Animal]`，反过来也不是。
 
 ```tut
 class Container[A](value: A) {
@@ -126,7 +126,7 @@ class Container[A](value: A) {
 }
 ```
 
-It may seem like a `Container[Cat]` should naturally also be a `Container[Animal]`, but allowing a mutable generic class to be covariant would not be safe.  In this example, it is very important that `Container` is invariant. Supposing `Container` was actually covariant, something like this could happen:
+看起来似乎一个`Container[Cat]`应该也是一个`Container[Animal]`，但是允许一个可变的泛型类协变其实是不安全的。这个例子中，`Container`是不变的，这点很重要。如果`Container`是协变的，类似于下面的事情可能就会发生：
 
 ```
 val catContainer: Container[Cat] = new Container(Cat("Felix"))
@@ -135,21 +135,21 @@ animalContainer.setValue(Dog("Spot"))
 val cat: Cat = catContainer.getValue // Oops, we'd end up with a Dog assigned to a Cat
 ```
 
-Fortunately, the compiler stops us long before we could get this far.
+幸运的是，在我们犯错前编译器就会阻止我们。
 
-### Other Examples
+### 其他示例
 
-Another example that can help one understand variance is `trait Function1[-T, +R]` from the Scala standard library. `Function1` represents a function with one argument, where the first type parameter `T` represents the argument type, and the second type parameter `R` represents the return type. A `Function1` is contravariant over its argument type, and covariant over its return type. For this example we'll use the literal notation `A => B` to represent a `Function1[A, B]`.
+另外有一个可以帮助我们理解型变的例子，是源于Scala标准库里的`trait Function1[-T, +R]`。`Function1`是带有一个参数的函数，第一个类型参数`T`表示参数类型，第二个类型参数`R`表示返回类型。`Function1`在它的参数类型上是逆变的，在返回类型上是协变的。一般我们会使用字面量`A => B`来表示`Function1[A, B]`。
 
-Assume the similar `Cat`, `Dog`, `Animal` inheritance tree used earlier, plus the following:
+假如我们已经有了和之前类似的`Cat`、`Dog`、`Animal`继承树，外加下面这些：
 
 ```tut
 abstract class SmallAnimal extends Animal
 case class Mouse(name: String) extends SmallAnimal
 ```
 
-Suppose we're working with functions that accept types of animals, and return the types of food they eat. If we would like a `Cat => SmallAnimal` (because cats eat small animals), but are given a `Animal => Mouse` instead, our program will still work. Intuitively an `Animal => Mouse` will still accept a `Cat` as an argument, because a `Cat` is an `Animal`, and it returns a `Mouse`, which is also a `SmallAnimal`. Since we can safely and invisibly substitute the former for the latter, we can say `Animal => Mouse` is a subtype of `Cat => SmallAnimal`.
+假设现在我们有个函数接受动物类型，返回它们吃的食物类型。我们想要的可能是`Cat => SmallAnimal`（因为猫会吃小动物），但是如果替换为`Animal => Mouse`，我们的程序也可以正常运行。直观上说`Animal => Mouse`也可以接受一个`Cat`作为参数，因为`Cat`是一个`Animal`，并且返回一个`Mouse`，而它也是一个`SmallAnimal`。我们可以安全且隐形地用后者进行替换，因而我们可以说`Animal => Mouse`是`Cat => SmallAnimal`的子类型。
 
-### Comparison With Other Languages
+### 和其他语言比较
 
-Variance is supported in different ways by some languages that are similar to Scala. For example, variance annotations in Scala closely resemble those in C#, where the annotations are added when a class abstraction is defined (declaration-site variance). In Java, however, variance annotations are given by clients when a class abstraction is used (use-site variance).
+和Scala类似的一些语言对于支持型变的方式是不一样的。例如，Scala中的型变注解其实和C#非常类似，它们都是在抽象类的定义时添加了注解（称为“声明式型变”）。而在Java中，型变注解是在一个抽象类使用时由使用者给定的（称为“使用式型变”）。
