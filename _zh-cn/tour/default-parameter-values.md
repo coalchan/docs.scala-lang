@@ -1,6 +1,6 @@
 ---
 layout: tour
-title: Default Parameter Values
+title: 默认参数值
 
 discourse: false
 
@@ -14,7 +14,7 @@ next-page: named-arguments
 previous-page: annotations
 ---
 
-Scala提供了参数默认值的功能，允许调用者忽略那些参数。
+Scala提供了默认参数值的功能，允许调用者忽略那些参数。
 
 ```tut
 def log(message: String, level: String = "INFO") = println(s"$level: $message")
