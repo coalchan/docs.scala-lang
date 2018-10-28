@@ -2,7 +2,7 @@
 layout: tour
 title: 多参数列表（柯里化）
 
-discourse: true
+discourse: false
 
 partof: scala-tour
 language: zh-cn

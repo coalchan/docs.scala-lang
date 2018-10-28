@@ -2,7 +2,7 @@
 layout: tour
 title: 样例类
 
-discourse: true
+discourse: false
 
 partof: scala-tour
 language: zh-cn
@@ -26,7 +26,7 @@ val frankenstein = Book("978-0486282114")
 ```
 注意这里实例化样例类`Book`时并没有使用关键字`new`。这是因为样例类默认有一个`apply`方法来构造对象。
 
-当你创建一个带有参数的样例类时，这些参数默认是公有（`val`）的。
+当你创建一个带有参数的样例类时，这些参数默认是不可变（`val`）的。
 
 ```
 case class Message(sender: String, recipient: String, body: String)

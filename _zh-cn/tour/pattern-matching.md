@@ -2,7 +2,7 @@
 layout: tour
 title: 模式匹配
 
-discourse: true
+discourse: false
 
 partof: scala-tour
 language: zh-cn
@@ -18,7 +18,7 @@ redirect_from: "/tutorials/tour/pattern-matching.html"
 模式匹配是检查一个值是否匹配某种模式的机制。一个成功的匹配可以把一个值解析成它的组成部分。它相当于Java中`switch`的增强版，可以以此来替代一堆的if/else语句。
 
 ## 语法
-一个match表达式有个待匹配的值、`match`关键字以及至少一个`case`从句。
+一个match表达式有个待匹配的值、`match`关键字以及至少一个`case`子句。
 
 ```tut
 import scala.util.Random
@@ -32,7 +32,7 @@ x match {
   case _ => "many"
 }
 ```
-上面的`val x`是0到10之间的要给随机整数。`x`是`match`操作符的左操作数，右边是4个样例组成的表达式。最后一个样例`_`匹配了大于2的所有数字。这些样例也被称为_代值_。
+上面的`val x`是0到10之间的一个随机整数。`x`是`match`操作符的左操作数，右边是4个样例组成的表达式。最后一个样例`_`匹配了大于2的所有数字。这些样例也被称为 _代值_。
 
 match表达式有一个返回值。
 

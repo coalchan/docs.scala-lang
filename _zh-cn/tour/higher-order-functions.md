@@ -2,7 +2,7 @@
 layout: tour
 title: 高阶函数
 
-discourse: true
+discourse: false
 
 partof: scala-tour
 language: zh-cn

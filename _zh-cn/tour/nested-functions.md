@@ -2,7 +2,7 @@
 layout: tour
 title: 嵌套方法
 
-discourse: true
+discourse: false
 
 partof: scala-tour
 language: zh-cn
